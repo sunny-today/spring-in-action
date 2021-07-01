@@ -1,4 +1,4 @@
-package tacos;
+package com.skyshop300.tacos;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

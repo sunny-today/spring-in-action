@@ -1,4 +1,4 @@
-package tacos;
+package com.skyshop300.tacos;
 
 import java.util.Date;
 import java.util.List;

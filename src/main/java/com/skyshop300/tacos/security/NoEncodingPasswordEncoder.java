@@ -1,4 +1,4 @@
-package tacos.security;
+package com.skyshop300.tacos.security;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 

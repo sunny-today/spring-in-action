@@ -1,14 +1,8 @@
-package tacos.data;
+package com.skyshop300.tacos.data;
 
-import tacos.Taco;
 import org.springframework.data.repository.CrudRepository;
 
-//// JDBC
-//public interface TacoRepository {
-//	Taco save(Taco design);
-//}
-
-
+import com.skyshop300.tacos.Taco;
 
 public interface TacoRepository extends CrudRepository<Taco, Long> {
 	
