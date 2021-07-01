@@ -588,8 +588,8 @@ protected void configure(HttpSecurity http) throws Exception {
 
 |메서드|하는 일|
 |-|-|
-|access(String)||	인자로 전달된 SpEL 표현식이 true면 접근을 허용한다.|
-|anonymous()||	익명의 사용자에게 접근을 허용한다.|
+|access(String)|	인자로 전달된 SpEL 표현식이 true면 접근을 허용한다.|
+|anonymous()|	익명의 사용자에게 접근을 허용한다.|
 |authenticated()|	익명이 아닌 사용자로 인증된 경우 접근을 허용한다.|
 |denyAll()|	무조건 접근을 거부한다.|
 |fullyAuthenticated()|	익명이 아니거나 또는 remember-me가 아닌 사용자로 인증되면 접근을 허용한다.|
