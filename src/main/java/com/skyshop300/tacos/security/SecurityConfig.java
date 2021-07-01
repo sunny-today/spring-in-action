@@ -1,4 +1,4 @@
-package tacos.security;
+package com.skyshop300.tacos.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -30,7 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.logout()
 		.logoutSuccessUrl("/")	// 로그아웃 이후 특정 페이지로 이동하도록 설정한다.
 		.and()
-		.csrf();
+		.csrf().ignoringAntMatchers("/h2-console/**")	// h2 Console의 CSRF 체크 해제
+		.and()
+		.headers().frameOptions().disable()	// h2 console은 iframe을 사용하기 때문에 X-Frame-Options 비활성화 함.
+		;
 	}
 	
 	@Autowired

@@ -1,4 +1,4 @@
-package tacos.web;
+package com.skyshop300.tacos.web;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -17,15 +17,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.skyshop300.tacos.Ingredient;
+import com.skyshop300.tacos.Ingredient.Type;
+import com.skyshop300.tacos.Order;
+import com.skyshop300.tacos.Taco;
+import com.skyshop300.tacos.User;
+import com.skyshop300.tacos.data.IngredientRepository;
+import com.skyshop300.tacos.data.TacoRepository;
+import com.skyshop300.tacos.data.UserRepository;
+
 import lombok.extern.slf4j.Slf4j;
-import tacos.Ingredient;
-import tacos.Ingredient.Type;
-import tacos.Order;
-import tacos.Taco;
-import tacos.User;
-import tacos.data.IngredientRepository;
-import tacos.data.TacoRepository;
-import tacos.data.UserRepository;
 
 @Slf4j
 @Controller
@@ -38,7 +39,6 @@ public class DesignTacoController {
 	
 	private UserRepository userRepo;
 	
-	//@@
 	@Autowired
 	public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo, UserRepository userRepo) {
 		this.ingredientRepo = ingredientRepo;
@@ -46,7 +46,6 @@ public class DesignTacoController {
 		this.userRepo = userRepo;
 	}
 	
-	//@@
 	@GetMapping
 	public String showDesignForm(Model model, Principal principal) {
 		List<Ingredient> ingredients = new ArrayList<>();
@@ -54,11 +53,8 @@ public class DesignTacoController {
 		
 		Type[] types = Ingredient.Type.values();
 		for (Type type : types) {
-			model.addAttribute(type.toString().toLowerCase(),
-					filterByType(ingredients, type));
+			model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
 		}
-		
-//		model.addAttribute("taco", new Taco());
 		
 		String username = principal.getName();
 		User user = userRepo.findByUsername(username);
@@ -67,8 +63,7 @@ public class DesignTacoController {
 		return "design";
 	}
 	
-	private List<Ingredient> filterByType(
-			List<Ingredient> ingredients, Type type) {
+	private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
 		return ingredients
 				.stream()
 				.filter(x -> x.getType().equals(type))

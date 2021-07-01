@@ -1,4 +1,4 @@
-package tacos.web;
+package com.skyshop300.tacos.web;
 
 import javax.validation.Valid;
 
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.skyshop300.tacos.Order;
+import com.skyshop300.tacos.User;
+import com.skyshop300.tacos.data.OrderRepository;
+
 import lombok.extern.slf4j.Slf4j;
-import tacos.Order;
-import tacos.User;
-import tacos.data.OrderRepository;
-import tacos.data.UserRepository;
 
 @Slf4j
 @Controller
@@ -25,7 +25,7 @@ import tacos.data.UserRepository;
 public class OrderController {
 	
 	private OrderRepository orderRepo;
-	private UserRepository userRepo;
+//	private UserRepository userRepo;	// Principal 객체를 Controller 메서드에 주입
 	
 	public OrderController(OrderRepository orderRepo) {
 		this.orderRepo = orderRepo;
@@ -52,7 +52,12 @@ public class OrderController {
 	}
 	
 	/*
-	 * 방법3)  processOrder()의 인자로 User 객체를 전달
+	 * 4.4. 사용자 인지하기
+	 * p. 159
+	 */
+	
+	/*
+	 * 방법4) @AuthenticationPrincipal 애노테이션 메서드 지정
 	 */
 	@PostMapping
 	public String processOrder(@Valid Order order, Errors errors, SessionStatus sessionStatus, @AuthenticationPrincipal User user) {
@@ -105,7 +110,7 @@ public class OrderController {
 //	}
 	
 	/*
-	 * 방법4) 
+	 * 방법3) SecurityContextHolder를 사용해서 보안 컨텍스트 얻기
 	 */
 //	@PostMapping
 //	public String processOrder(@Valid Order order, Errors errors, SessionStatus sessionStatus) {
