@@ -1,6 +1,7 @@
 package com.jyjeong.tacos.web;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -16,6 +17,11 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 //    @Override
+//    public void addFormatters(FormatterRegistry registry) {
+//        registry.addConverter(new IngredientByIdConverter());
+//    }
+
+    //    @Override
 //    public void configureViewResolvers(ViewResolverRegistry registry) {
 //
 //    }
