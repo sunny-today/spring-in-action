@@ -1,12 +1,15 @@
 package com.jyjeong.tacos.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -15,14 +18,7 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/design", "/orders").access("hasRole('ROLE_USER')")
-//                .antMatchers("/","/**","/h2-console/**").permitAll()
-//                .and()
-//                .httpBasic();
-//    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,13 +29,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        } else {
 //            setRealMode(http);
 //        }
-        setLocalMode(http);
+        //setLocalMode(http);
+        setBookMode(http);
     }
 
-//    private boolean isLocalMode() {
-//        String profile = env.getActiveProfiles().length > 0? env.getActiveProfiles()[0] : "local";
-//        return profile.equals("local");
-//    }
+    private void setBookMode(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/design", "/orders").access("hasRole('ROLE_USER')")
+                .antMatchers("/","/**","/h2-console/**").permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/design", true)
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()
+                .csrf();
+    }
+
+
 
     private void setLocalMode(HttpSecurity http) throws Exception {
         http.antMatcher("/**")
@@ -49,6 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
         ;
     }
+
+//    private boolean isLocalMode() {
+//        String profile = env.getActiveProfiles().length > 0? env.getActiveProfiles()[0] : "local";
+//        return profile.equals("local");
+//    }
 
 //    private void setRealMode(HttpSecurity http) throws Exception {
 //        http.antMatcher("/**")
@@ -62,6 +76,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -74,15 +96,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .password("{noop}password2")
 //                .authorities("ROLE_USER");
 
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "SELECT USERNAME, PASSWORD, ENABLED FROM USERS " +
-                        "WHERE USERNAME = ?")
-                .authoritiesByUsernameQuery(
-                        "SELECT USERNAME, AUTHORITY FROM AUTHORITIES " +
-                        "WHERE USERNAME = ?")
-                //.passwordEncoder(new BCryptPasswordEncoder());
-                .passwordEncoder(new NoEncodingPasswordEncoder());
+//        auth.jdbcAuthentication()
+//                .dataSource(dataSource)
+//                .usersByUsernameQuery(
+//                        "SELECT USERNAME, PASSWORD, ENABLED FROM USERS " +
+//                        "WHERE USERNAME = ?")
+//                .authoritiesByUsernameQuery(
+//                        "SELECT USERNAME, AUTHORITY FROM AUTHORITIES " +
+//                        "WHERE USERNAME = ?")
+//                //.passwordEncoder(new BCryptPasswordEncoder());
+//                .passwordEncoder(new NoEncodingPasswordEncoder());
+
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(encoder());
+
     }
 }
