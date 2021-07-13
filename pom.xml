@@ -15,7 +15,6 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
-        <version>1.4.196</version> <!-- h2 version -->
     </properties>
     <dependencies>
         <dependency>
@@ -51,6 +50,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>1.4.196</version> <!-- h2 version -->
             <scope>runtime</scope>
         </dependency>
         <dependency>
