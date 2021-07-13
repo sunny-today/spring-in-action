@@ -1,25 +1,56 @@
 package com.jyjeong.tacos;
 
+import com.jyjeong.tacos.data.IngredientRepository;
+import com.jyjeong.tacos.data.TacoRepository;
+import com.jyjeong.tacos.data.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
 
+    private final IngredientRepository ingredientRepo;
+    private final TacoRepository tacoRepo;
+    private UserRepository userRepo;
+
+    @Autowired
+    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo, UserRepository userRepo) {
+        this.ingredientRepo = ingredientRepo;
+        this.tacoRepo = tacoRepo;
+        this.userRepo = userRepo;
+    }
+
+    @Autowired
+
+
+    @ModelAttribute(name = "order")
+    public Order order() {
+        return new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco() {
+        return new Taco();
+    }
+
     @GetMapping
-    public String showDesignForm(Model model) {
+    public String showDesignForm(Model model, Principal principal) {
+
+/*
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Torilla", Ingredient.Type.WRAP),
                 new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP),
@@ -32,6 +63,9 @@ public class DesignTacoController {
                 new Ingredient("SLSA", "Salsa", Ingredient.Type.SAUCE),
                 new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE)
                 );
+ */
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepo.findAll().forEach(i -> ingredients.add(i));
 
         Ingredient.Type[] types = Ingredient.Type.values();
         for(Ingredient.Type type : types) {
@@ -39,7 +73,11 @@ public class DesignTacoController {
                     filterByType(ingredients, type));
         }
 
-        model.addAttribute("taco", new Taco());
+        //model.addAttribute("taco", new Taco());
+
+        String username = principal.getName();
+        User user = userRepo.findByUsername(username);
+        model.addAttribute("user", user);
 
         return "design";
     }
@@ -51,15 +89,17 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors) {
+    public String processDesign(@Valid Taco design, Errors errors, @ModelAttribute Order order) {
 
         if(errors.hasErrors()) {
             return "design";
         }
 
-        // 타코 디자인(선택된 식자재 내역)을 저장
-        // 3장
-        log.info("Processing design: " + design);
+
+
+        log.info("save Taco!");
+        Taco saved = tacoRepo.save(design);
+        order.addDesign(saved);
 
         return "redirect:/orders/current";
     }
