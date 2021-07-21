@@ -13,9 +13,15 @@
 
 ### Study 순서
 - 정재엽 -> 김현수 -> 박성용
-- Chapter2, Chapter5, Chapter8, Chapter 11 / 정재엽
-- Chapter3, Chapter6, Chapter9, Chapter 12, Chapter14 / 김현수
-- Chapter4, Chapter7, Chapter10, Chapter 13, Chapter15 / 박성용
+
+|내용|날짜|발표자|
+|------|---|---|
+|Chapter2|2021-06-16(수)|정재엽|
+|Chapter3|2021-06-26(토)|김현수|
+|Chapter4|2021-06-30(수)|박성용|
+|Chapter5|2021-07-07(수)|정재엽|
+|Chapter6, 7|2021-07-21(수)|김현수|
+|Chapter8|2021-07-28(수)|박성용|
 
 ### 예제 코드
 * https://github.com/Jpub/SpringInAction5
